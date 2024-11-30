@@ -10,245 +10,245 @@ html><head><base href="about:none">
 
 <!-- Add Bootstrap CSS -->
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 
 
 <!-- Keep the confetti and Tone.js scripts -->
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.min.js"></script>
 
 
 
 <!-- Update the custom styles to use Bootstrap classes where possible -->
 
-<style>
+     <style>
 
-body {
+    body {
 
-min-height: 100vh;
+    min-height: 100vh;
 
-background: linear-gradient(45deg, #f6d365 0%, #fda085 100%); transition: background 1s ease;
+    background: linear-gradient(45deg, #f6d365 0%, #fda085 100%); transition: background 1s ease;
 
-}
-
-
-
-#color-party-container {
-
-background-color: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);
-
-border-radius: 1rem;
-
-}
+     }
 
 
 
-#party-title {
+     #color-party-container {
 
-animation: bounce 2s infinite;
+     background-color: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);
 
-}
+    border-radius: 1rem;
 
-
-
-@keyframes bounce {
-
-0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); }
-
-}
+    }
 
 
 
-#color-palette { display: grid;
+     #party-title {
 
-grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); gap: 1rem;
+     animation: bounce 2s infinite;
 
-}
+     }
 
 
 
-.color-button { width: 60px; height: 60px;
+      @keyframes bounce {
 
-border-radius: 50%;
+    0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); }
+
+      }
+
+
+
+      #color-palette { display: grid;
+
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); gap: 1rem;
+
+    }
+
+
+
+    .color-button { width: 60px; height: 60px;
+
+      border-radius: 50%;
 
  
 
-border: 4px solid white; cursor: pointer; transition: all 0.3s ease;
+     border: 4px solid white; cursor: pointer; transition: all 0.3s ease;
 
-box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 
-}
-
-
-
-.color-button:hover {
-
-transform: scale(1.2) rotate(15deg);
-
-}
+     }
 
 
 
-#new-color-input { width: 60px; height: 60px; border-radius: 50%;
+     .color-button:hover {
 
-border: 4px solid white; padding: 0;
+     transform: scale(1.2) rotate(15deg);
 
-}
-
-
-
-#final-results { display: none; position: fixed; top: 50%;
-
-left: 50%;
-
-transform: translate(-50%, -50%);
-
-z-index: 1000;
-
-}
+    }
 
 
 
-@media (max-width: 576px) {
+    #new-color-input { width: 60px; height: 60px; border-radius: 50%;
 
-.color-button, #new-color-input { width: 50px;
+     border: 4px solid white; padding: 0;
 
-height: 50px;
-
-}
-
-}
+    }
 
 
 
-@media (max-width: 400px) {
+     #final-results { display: none; position:   fixed; top: 50%;
 
-.color-button, #new-color-input { width: 40px;
+    left: 50%;
+   
+    transform: translate(-50%, -50%);
 
-height: 40px;
+    z-index: 1000;
 
-}
+    }
 
-}
 
-</style>
 
-</head>
+     @media (max-width: 576px) {
 
-<body class="py-4">
+    .color-button, #new-color-input { width: 50px;
+  
+     height: 50px;
 
-<div class="container">
+     }
 
-<div id="color-party-container" class="p-4 shadow-lg mx-auto" style="max-width: 800px;">
+      }
 
-<h1 id="party-title" class="text-center mb-4"> Fiesta de Colores </h1>
+
+
+       @media (max-width: 400px) {
+
+    .color-button, #new-color-input { width: 40px;
+
+    height: 40px;
+
+    }
+
+    }
+
+    </style>
+
+    </head>
+
+     <body class="py-4">
+
+    <div class="container">
+
+    <div id="color-party-container" class="p-4 shadow-lg mx-auto" style="max-width: 800px;">
+
+    <h1 id="party-title" class="text-center mb-4"> Fiesta de Colores </h1>
 
  
-
-<div id="color-palette" class="my-4"></div>
-
-
-
-<div class="d-flex flex-wrap gap-2 justify-content-center mb-4">
-
-<input
-
-type="color" id="new-color-input" value="#ff6b6b" class="me-2"
-
->
-
-<button onclick="addNewColor()" class="btn btn-primary"> Agregar Color
-
-</button>
-
-<button onclick="resetParty()" class="btn btn-info text-white"> Reiniciar Fiesta
-
-</button>
-
-<button id="end-party" onclick="endParty()" class="btn btn-danger"> Finalizar Fiesta
-
-</button>
-
-</div>
+  
+    <div id="color-palette" class="my-4"></div>
 
 
 
-<div id="vote-display" class="alert alert-info mt-3"></div>
+      <div class="d-flex flex-wrap gap-2 justify-content-center mb-4">
 
-<div id="countdown" class="text-center text-muted"></div>
+    <input
 
-</div>
+    type="color" id="new-color-input"  value="#ff6b6b" class="me-2"
+
+    >
+
+    <button onclick="addNewColor()" class="btn btn-primary"> Agregar Color
+
+     </button>
+
+     <button onclick="resetParty()" class="btn btn-info text-white"> Reiniciar Fiesta
+
+     </button>
+
+     <button id="end-party" onclick="endParty()" class="btn btn-danger"> Finalizar Fiesta
+
+    </button>
+
+     </div>
 
 
 
-<div id="final-results" class="card p-4 text-center"></div>
+     <div id="vote-display" class="alert alert-info mt-3"></div>
 
-</div>
+    <div id="countdown" class="text-center text-muted"></div>
+
+    </div>
+
+
+
+    <div id="final-results" class="card p-4 text-   center"></div>
+
+     </div>
 
 
 
 <!-- Add Bootstrap JS at the end of body -->
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
+     <script>
 
-const initialColors = [
+     const initialColors = [
 
-'#ff6b6b', '#4ecdc4', '#45b7d1', '#f9d5e5', '#eeac99', '#ff7f50'
+     '#ff6b6b', '#4ecdc4', '#45b7d1',   '#f9d5e5', '#eeac99', '#ff7f50'
 
-];
+    ];
 
 
 
-const soundEffects = {
+     const soundEffects = {
+   
+    piano: 'https://assets.mixkit.co/active_storage/sfx/133/133-preview.mp3', drums: 'https://assets.mixkit.co/active_storage/sfx/146/146-preview.mp3', violin: 'https://assets.mixkit.co/active_storage/sfx/203/203-preview.mp3',
 
-piano: 'https://assets.mixkit.co/active_storage/sfx/133/133-preview.mp3', drums: 'https://assets.mixkit.co/active_storage/sfx/146/146-preview.mp3', violin: 'https://assets.mixkit.co/active_storage/sfx/203/203-preview.mp3',
+     saxophone: 'https://assets.mixkit.co/active_storage/sfx/2425/2425-preview.mp3', trumpet: 'https://assets.mixkit.co/active_storage/sfx/2408/2408-preview.mp3', marimba: 'https://assets.mixkit.co/active_storage/sfx/147/147-preview.mp3', guitar: 'https://assets.mixkit.co/active_storage/sfx/123/123-preview.mp3',
 
-saxophone: 'https://assets.mixkit.co/active_storage/sfx/2425/2425-preview.mp3', trumpet: 'https://assets.mixkit.co/active_storage/sfx/2408/2408-preview.mp3', marimba: 'https://assets.mixkit.co/active_storage/sfx/147/147-preview.mp3', guitar: 'https://assets.mixkit.co/active_storage/sfx/123/123-preview.mp3',
-
-flute: 'https://assets.mixkit.co/active_storage/sfx/2405/2405-preview.mp3', xylophone: 'https://assets.mixkit.co/active_storage/sfx/135/135-preview.mp3',
+    flute: 'https://assets.mixkit.co/active_storage/sfx/2405/2405-preview.mp3', xylophone: 'https://assets.mixkit.co/active_storage/sfx/135/135-preview.mp3',
 
  
 
-harp: 'https://assets.mixkit.co/active_storage/sfx/134/134-preview.mp3', bells: 'https://assets.mixkit.co/active_storage/sfx/136/136-preview.mp3', bongos: 'https://assets.mixkit.co/active_storage/sfx/149/149-preview.mp3'
+    harp: 'https://assets.mixkit.co/active_storage/sfx/134/134-preview.mp3', bells: 'https://assets.mixkit.co/active_storage/sfx/136/136-preview.mp3', bongos: 'https://assets.mixkit.co/active_storage/sfx/149/149-preview.mp3'
 
-};
-
-
-
-let colorVotes = {}; let inactivityTimer;
-
-let isPartyActive = true; let synth;
-
-let currentMusicLoop; let currentAudio = null;
+    };
 
 
 
-function generateRandomColor() {
+     let colorVotes = {}; let inactivityTimer;
 
-const letters = '0123456789ABCDEF'; let color = '#';
+     let isPartyActive = true; let synth;
 
-for (let i = 0; i < 6; i++) {
-
-color += letters[Math.floor(Math.random() * 16)];
-
-}
-
-return color;
-
-}
+    let currentMusicLoop; let currentAudio = null;
 
 
 
-async function initAudio() { await Tone.start();
+     function generateRandomColor() {
+
+     const letters = '0123456789ABCDEF'; let color = '#';
+
+     for (let i = 0; i < 6; i++) {
+
+     color += letters[Math.floor(Math.random() * 16)];
+
+    }
+
+     return color;
+
+     }
 
 
 
-synth = new Tone.PolySynth(Tone.Synth, { oscillator: {
+     async function initAudio() { await Tone.start();
+
+
+
+      synth = new Tone.PolySynth(Tone.Synth, { oscillator: {
 
 type: "sawtooth" // More electronic sound
 
