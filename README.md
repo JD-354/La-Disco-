@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -82,7 +81,7 @@
     <script>
         const initialColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8AA'];
         const colorSounds = {
-            '#FF6B6B': 'https://youtube.com/shorts/bZQbWnZrwRc?si=t6Gj-eDPCrUn-z9O',     // Rojo
+            '#FF6B6B': 'https://youtu.be/1K0PHAKFXVU',     // Rojo
             '#4ECDC4': './lectro.mpeg', // Verde
             '#45B7D1': './piano.mpeg', // Azul
             '#FFA07A': './canserv.mpeg', // Naranja
