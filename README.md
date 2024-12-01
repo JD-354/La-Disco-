@@ -82,7 +82,7 @@
         const initialColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8AA'];
         const colorSounds = {
             '#FF6B6B': 'https://youtu.be/1K0PHAKFXVU',     // Rojo
-            '#4ECDC4': './lectro.mpeg', // Verde
+            '#4ECDC4': 'https://youtu.be/1K0PHAKFXVU?t=2', // Verde
             '#45B7D1': './piano.mpeg', // Azul
             '#FFA07A': './canserv.mpeg', // Naranja
             '#98D8AA': './yatra.mpeg'  // Verde claro
