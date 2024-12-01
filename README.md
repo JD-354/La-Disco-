@@ -1,282 +1,250 @@
-html><head><base href="about:none">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> Fiesta de Colores Mejorada </title>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>🎨 Fiesta de Colores 🎉</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
 
-<!-- Add Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        .container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+        }
 
-<!-- Keep the confetti and Tone.js scripts -->
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.min.js"></script>
+        #party-title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            transition: color 0.5s ease;
+        }
 
-<!-- Update the custom styles to use Bootstrap classes where possible -->
-<style>
-body {
-min-height: 100vh;
-background: linear-gradient(45deg, #f6d365 0%, #fda085 100%); transition: background 1s ease;
-}
+        .color-palette {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
 
-#color-party-container {
-background-color: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);
-border-radius: 1rem;
-}
+        .color-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
 
-#party-title {
-animation: bounce 2s infinite;
-}
+        .color-btn:hover {
+            transform: scale(1.1);
+        }
 
-@keyframes bounce {
-0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); }
-}
+        #new-color-input {
+            margin-right: 10px;
+            padding: 5px;
+        }
 
-#color-palette { display: grid;
-grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); gap: 1rem;
-}
+        #info-display {
+            margin-top: 20px;
+            font-weight: bold;
+        }
 
-.color-button { width: 60px; height: 60px;
-border-radius: 50%;
- 
-border: 4px solid white; cursor: pointer; transition: all 0.3s ease;
-box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
+        .final-results {
+            background-color: #f4f4f4;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
 
-.color-button:hover {
-transform: scale(1.2) rotate(15deg);
-}
+        .color-result {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 1.2em;
+        }
 
-#new-color-input { width: 60px; height: 60px; border-radius: 50%;
-border: 4px solid white; padding: 0;
-}
-
-#final-results { display: none; position: fixed; top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-z-index: 1000;
-}
-
-@media (max-width: 576px) {
-.color-button, #new-color-input { width: 50px;
-height: 50px;
-}
-}
-
-@media (max-width: 400px) {
-.color-button, #new-color-input { width: 40px;
-height: 40px;
-}
-}
-</style>
+        .inactive-warning {
+            color: red;
+            font-size: 0.8em;
+            margin-top: 10px;
+        }
+    </style>
 </head>
-<body class="py-4">
-<div class="container">
-<div id="color-party-container" class="p-4 shadow-lg mx-auto" style="max-width: 800px;">
-<h1 id="party-title" class="text-center mb-4"> Fiesta de Colores </h1>
- 
-<div id="color-palette" class="my-4"></div>
+<body>
+    <div class="container">
+        <h1 id="party-title">¡Bienvenidos a la Fiesta de Colores! 🎨</h1>
+        
+        <div>
+            <input type="color" id="new-color-input">
+            <button onclick="addNewColor()">Añadir Color</button>
+            <button onclick="resetParty()">Reiniciar Fiesta</button>
+            <button onclick="finishParty()">Finalizar Fiesta</button>
+        </div>
 
-<div class="d-flex flex-wrap gap-2 justify-content-center mb-4">
-<input
-type="color" id="new-color-input" value="#ff6b6b" class="me-2"
->
-<button onclick="addNewColor()" class="btn btn-primary"> Agregar Color
-</button>
-<button onclick="resetParty()" class="btn btn-info text-white"> Reiniciar Fiesta
-</button>
-<button id="end-party" onclick="endParty()" class="btn btn-danger"> Finalizar Fiesta
-</button>
-</div>
+        <div class="color-palette" id="color-palette"></div>
 
-<div id="vote-display" class="alert alert-info mt-3"></div>
-<div id="countdown" class="text-center text-muted"></div>
-</div>
+        <div id="info-display"></div>
+        <div id="timer-display" class="inactive-warning"></div>
+        <div id="final-results" class="final-results"></div>
+    </div>
 
-<div id="final-results" class="card p-4 text-center"></div>
-</div>
+    <script>
+        const initialColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8AA'];
+        let colors = [...initialColors];
+        const colorVotes = {};
+        let inactivityTimer;
+        let clickSound;
 
-<!-- Add Bootstrap JS at the end of body -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-const initialColors = [
-'#ff6b6b', '#4ecdc4', '#45b7d1', '#f9d5e5', '#eeac99', '#ff7f50'
-];
+        function generateRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
 
-const soundEffects = {
-piano: 'https://assets.mixkit.co/active_storage/sfx/133/133-preview.mp3', drums: 'https://assets.mixkit.co/active_storage/sfx/146/146-preview.mp3', violin: 'https://assets.mixkit.co/active_storage/sfx/203/203-preview.mp3',
-saxophone: 'https://assets.mixkit.co/active_storage/sfx/2425/2425-preview.mp3', trumpet: 'https://assets.mixkit.co/active_storage/sfx/2408/2408-preview.mp3', marimba: 'https://assets.mixkit.co/active_storage/sfx/147/147-preview.mp3', guitar: 'https://assets.mixkit.co/active_storage/sfx/123/123-preview.mp3',
-flute: 'https://assets.mixkit.co/active_storage/sfx/2405/2405-preview.mp3', xylophone: 'https://assets.mixkit.co/active_storage/sfx/135/135-preview.mp3',
- 
-harp: 'https://assets.mixkit.co/active_storage/sfx/134/134-preview.mp3', bells: 'https://assets.mixkit.co/active_storage/sfx/136/136-preview.mp3', bongos: 'https://assets.mixkit.co/active_storage/sfx/149/149-preview.mp3'
-};
+        function initializeParty() {
+            const palette = document.getElementById('color-palette');
+            palette.innerHTML = '';
+            
+            colors.forEach(color => {
+                const colorBtn = document.createElement('button');
+                colorBtn.className = 'color-btn';
+                colorBtn.style.backgroundColor = color;
+                colorBtn.onclick = () => selectColor(color);
+                palette.appendChild(colorBtn);
+                colorVotes[color] = 0;
+            });
 
-let colorVotes = {}; let inactivityTimer;
-let isPartyActive = true; let synth;
-let currentMusicLoop; let currentAudio = null;
+            // Preparar sonido de clic
+            clickSound = new Audio('https://www.soundjay.com/button/sounds/button-09.mp3');
 
-function generateRandomColor() {
-const letters = '0123456789ABCDEF'; let color = '#';
-for (let i = 0; i < 6; i++) {
-color += letters[Math.floor(Math.random() * 16)];
-}
-return color;
-}
+            // Limpiar resultados finales
+            document.getElementById('final-results').innerHTML = '';
+        }
 
-async function initAudio() { await Tone.start();
+        function selectColor(color) {
+            // Reproducir sonido
+            if (clickSound) clickSound.play();
 
-synth = new Tone.PolySynth(Tone.Synth, { oscillator: {
-type: "sawtooth" // More electronic sound
-},
-envelope: { attack: 0.01,
-decay: 0.3,
-sustain: 0.7,
-release: 0.2
-}
-}).toDestination();
+            // Cambiar título
+            const title = document.getElementById('party-title');
+            title.style.color = color;
 
-const reverb = new Tone.Reverb({ decay: 3,
-wet: 0.4
-}).toDestination();
+            // Contar votos
+            colorVotes[color]++;
+            updateMostPopularColor();
 
-const delay = new Tone.PingPongDelay({ delayTime: "16n",
-feedback: 0.4,
-wet: 0.3
-}).toDestination();
- 
-synth.connect(reverb); synth.connect(delay);
-}
+            // Iniciar temporizador de 10 segundos SOLO al seleccionar un color
+            startColorSelectionTimer();
+        }
 
-document.body.addEventListener('click', function() { if (!synth) initAudio();
-}, { once: true });
+        function startColorSelectionTimer() {
+            const timerDisplay = document.getElementById('timer-display');
+            clearTimeout(inactivityTimer);
+            timerDisplay.innerHTML = '';
 
-function playColorSound(color) {
-// Stop any currently playing audio if (currentAudio) {
-currentAudio.pause(); currentAudio.currentTime = 0;
-}
+            inactivityTimer = setTimeout(() => {
+                timerDisplay.innerHTML = 'Tiempo de selección agotado. Reiniciando la fiesta...';
+                setTimeout(resetParty, 2000);
+            }, 10000);
+        }
 
-// Get all available sounds
-const sounds = Object.values(soundEffects);
+        function addNewColor() {
+            const newColor = generateRandomColor();
 
-// Create a deterministic mapping from color to sound based on the color's hex value
-const colorSum = color.slice(1).split('').reduce((sum, char) => sum + char.charCodeAt(0), 0); const soundIndex = colorSum % sounds.length;
+            if (newColor && !colors.includes(newColor)) {
+                colors.push(newColor);
+                colorVotes[newColor] = 0;
 
-// Create and play new audio
-const audio = new Audio(sounds[soundIndex]); audio.loop = true;
-audio.play();
+                const palette = document.getElementById('color-palette');
+                const colorBtn = document.createElement('button');
+                colorBtn.className = 'color-btn';
+                colorBtn.style.backgroundColor = newColor;
+                colorBtn.onclick = () => selectColor(newColor);
+                palette.appendChild(colorBtn);
+            }
+        }
 
-return audio;
-}
+        function updateMostPopularColor() {
+            const infoDisplay = document.getElementById('info-display');
+            const mostPopularColor = Object.keys(colorVotes).reduce((a, b) => 
+                colorVotes[a] > colorVotes[b] ? a : b
+            );
 
-function initColorParty() {
-const palette = document.getElementById('color-palette'); palette.innerHTML = '';
-isPartyActive = true;
+            infoDisplay.innerHTML = `Color más popular: 
+                <span style="color:${mostPopularColor}">
+                    ${mostPopularColor} (${colorVotes[mostPopularColor]} votos)
+                </span>`;
+        }
 
-initialColors.forEach(color => { createColorButton(color); colorVotes[color] = 0;
-});
+        function resetParty() {
+            // Limpiar temporizador
+            clearTimeout(inactivityTimer);
+            const timerDisplay = document.getElementById('timer-display');
+            timerDisplay.innerHTML = '';
 
-document.getElementById('final-results').style.display = 'none'; document.getElementById('color-party-container').style.display = 'block'; updateVoteDisplay();
-}
- 
-function createColorButton(color) {
-const button = document.createElement('div'); button.classList.add('color-button'); button.style.backgroundColor = color; button.onclick = () => selectColor(color);
+            // Reiniciar votos
+            Object.keys(colorVotes).forEach(color => {
+                colorVotes[color] = 0;
+            });
 
-document.getElementById('color-palette').appendChild(button);
-}
+            const title = document.getElementById('party-title');
+            title.style.color = 'black';
 
-function selectColor(color) { if (!isPartyActive) return;
+            const infoDisplay = document.getElementById('info-display');
+            infoDisplay.innerHTML = '';
 
-const title = document.getElementById('party-title'); title.style.color = color;
-document.body.style.background = linear-gradient(45deg, ${color}, ${lightenColor(color)});
+            const finalResults = document.getElementById('final-results');
+            finalResults.innerHTML = '';
 
-// Play the sound effect
-currentAudio = playColorSound(color);
+            colors = [...initialColors];
+            initializeParty();
+        }
 
-confetti({ particleCount: 100,
-spread: 70, origin: { y: 0.6 }
-});
+        function finishParty() {
+            // Limpiar temporizador
+            clearTimeout(inactivityTimer);
+            const timerDisplay = document.getElementById('timer-display');
+            timerDisplay.innerHTML = '';
 
-colorVotes[color] = (colorVotes[color] || 0) + 1; updateVoteDisplay();
+            // Encontrar el color más usado
+            const mostPopularColor = Object.keys(colorVotes).reduce((a, b) => 
+                colorVotes[a] > colorVotes[b] ? a : b
+            );
 
-resetInactivityTimer();
-}
+            const finalResults = document.getElementById('final-results');
+            finalResults.innerHTML = `
+                <h3>🏆 Color Ganador de la Fiesta 🎉</h3>
+                <div class="color-result" style="background-color:${mostPopularColor}; color:white;">
+                    ${mostPopularColor} (${colorVotes[mostPopularColor]} votos)
+                </div>
+            `;
 
-function lightenColor(color) {
-const r = parseInt(color.substr(1,2), 16); const g = parseInt(color.substr(3,2), 16); const b = parseInt(color.substr(5,2), 16);
+            // Reiniciar la fiesta automáticamente
+            setTimeout(resetParty, 5000);
+        }
 
-return rgb(${Math.min(r + 50, 255)}, ${Math.min(g + 50, 255)}, ${Math.min(b + 50, 255)});
-}
-
-function addNewColor() { if (!isPartyActive) return;
-const newColor = generateRandomColor(); document.getElementById('new-color-input').value = newColor; createColorButton(newColor);
-colorVotes[newColor] = 0;
- 
-confetti({ particleCount: 50,
-spread: 45, origin: { y: 0.7 }
-});
-}
-
-function updateVoteDisplay() {
-const voteDisplay = document.getElementById('vote-display'); const mostPopularColor = Object.keys(colorVotes).reduce(
-(a, b) => colorVotes[a] > colorVotes[b] ? a : b
-);
-
-voteDisplay.innerHTML = `Color Más Popular:
-<span style="color:${mostPopularColor}; font-weight: bold">
-${mostPopularColor} (${colorVotes[mostPopularColor]} votos)
-</span>`;
-}
-
-function resetParty() { if (currentAudio) {
-currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null;
-}
-document.getElementById('party-title').style.color = 'black'; document.body.style.background = 'linear-gradient(45deg, #f6d365 0%, #fda085 100%)'; initColorParty();
-
-confetti({ particleCount: 200,
-spread: 180, origin: { y: 0.5 }
-});
-}
-
-function endParty() { if (currentAudio) {
-currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null;
-}
-isPartyActive = false; clearInterval(inactivityTimer);
-document.getElementById('countdown').textContent = '';
- 
-const mostPopularColor = Object.entries(colorVotes).reduce( (max, [color, votes]) => votes > max[1] ? [color, votes] : max, ['', 0]
-);
-
-const finalResults = document.getElementById('final-results'); finalResults.style.display = 'block'; finalResults.style.backgroundColor = mostPopularColor[0]; finalResults.innerHTML = `
-<h2 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3)">
-¡Fiesta Finalizada!
-</h2>
-<p style="color: white; font-size: 1.2rem">
-Color más votado: ${mostPopularColor[0]}<br> Total de votos: ${mostPopularColor[1]}
-</p>
-<button onclick="resetParty()" style="margin-top: 20px" class="btn btn-light"> Iniciar Nueva Fiesta
-</button>
-`;
-
-confetti({ particleCount: 300,
-spread: 180, origin: { y: 0.6 }
-});
-}
-
-function resetInactivityTimer() { clearTimeout(inactivityTimer);
-
-const countdownElement = document.getElementById('countdown'); let timeLeft = 10; // Changed from 15 to 10
-countdownElement.textContent = Siguiente turno en: ${timeLeft} segundos; inactivityTimer = setInterval(() => {
-timeLeft--;
-countdownElement.textContent = Siguiente turno en: ${timeLeft} segundos;
-
-if (timeLeft <= 0) { clearInterval(inactivityTimer); if (currentAudio) {
-currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null;
- 
-}
-countdownElement.textContent = '¡Es tu turno! Elige un color ';
-}
-}, 1000);
-}
-
-initColorParty();
-</script>
+        // Inicializar la fiesta al cargar
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeParty();
+        });
+    </script>
 </body>
 </html>
