@@ -81,7 +81,7 @@
     <script>
         const initialColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8AA'];
         const colorSounds = {
-            '#FF6B6B': '<iframe width="937" height="237" src="https://www.youtube.com/embed/1K0PHAKFXVU" title="Beatbox con flauta" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',     // Rojo
+            '#FF6B6B': 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js',     // Rojo
             '#4ECDC4': 'https://youtu.be/1K0PHAKFXVU?t=2', // Verde
             '#45B7D1': './piano.mpeg', // Azul
             '#FFA07A': './canserv.mpeg', // Naranja
