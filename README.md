@@ -82,7 +82,7 @@
     <script>
         const initialColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8AA'];
         const colorSounds = {
-            '#FF6B6B': './flauta.mpeg',     // Rojo
+            '#FF6B6B': 'https://youtube.com/shorts/bZQbWnZrwRc?si=t6Gj-eDPCrUn-z9O',     // Rojo
             '#4ECDC4': './lectro.mpeg', // Verde
             '#45B7D1': './piano.mpeg', // Azul
             '#FFA07A': './canserv.mpeg', // Naranja
