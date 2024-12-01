@@ -51,44 +51,20 @@
             transform: scale(1.1);
         }
 
-        #new-color-input {
-            margin-right: 10px;
-            padding: 5px;
-        }
-
-        #info-display {
-            margin-top: 20px;
-            font-weight: bold;
-        }
-
-        .final-results {
-            background-color: #f4f4f4;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .color-result {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 1.2em;
-        }
-
-        .inactive-warning {
-            color: red;
-            font-size: 0.8em;
-            margin-top: 10px;
+        .volume-control {
+            margin: 10px 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 id="party-title">¡Bienvenidos a la Fiesta de Colores! 🎨</h1>
+        <h1 id="party-title">Bienvenidos a la Fiesta de Colores🎨</h1>
         
+        <div class="volume-control">
+            <label for="volume-slider">Volumen: </label>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5">
+        </div>
+
         <div>
             <input type="color" id="new-color-input">
             <button onclick="addNewColor()">Añadir Color</button>
@@ -105,10 +81,35 @@
 
     <script>
         const initialColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8AA'];
+        const colorSounds = {
+            '#FF6B6B': './flauta.mpeg',     // Rojo
+            '#4ECDC4': './lectro.mpeg', // Verde
+            '#45B7D1': './piano.mpeg', // Azul
+            '#FFA07A': './canserv.mpeg', // Naranja
+            '#98D8AA': './yatra.mpeg'  // Verde claro
+        };
+
         let colors = [...initialColors];
         const colorVotes = {};
         let inactivityTimer;
-        let clickSound;
+        let colorAudioMap = {};
+
+        function preloadSounds() {
+            // Precargar sonidos para una reproducción más rápida
+            Object.entries(colorSounds).forEach(([color, soundUrl]) => {
+                const audio = new Audio(soundUrl);
+                audio.preload = 'auto';
+                colorAudioMap[color] = audio;
+            });
+
+            // Configurar control de volumen
+            const volumeSlider = document.getElementById('volume-slider');
+            volumeSlider.addEventListener('input', (e) => {
+                Object.values(colorAudioMap).forEach(audio => {
+                    audio.volume = e.target.value;
+                });
+            });
+        }
 
         function generateRandomColor() {
             const letters = '0123456789ABCDEF';
@@ -119,7 +120,25 @@
             return color;
         }
 
+        function playSoundForColor(color) {
+            const specificSound = colorSounds[color];
+            if (specificSound) {
+                const audio = colorAudioMap[color];
+                if (audio) {
+                    audio.currentTime = 0; // Reiniciar reproducción
+                    audio.play().catch(error => console.log('Error playing sound:', error));
+                }
+            } else {
+                // Si no tiene sonido específico, usar un sonido genérico
+                const genericSound = new Audio('https://www.soundjay.com/button/sounds/button-08.mp3');
+                genericSound.volume = document.getElementById('volume-slider').value;
+                genericSound.play().catch(error => console.log('Error playing generic sound:', error));
+            }
+        }
+
         function initializeParty() {
+            preloadSounds(); // Precargar sonidos al iniciar
+
             const palette = document.getElementById('color-palette');
             palette.innerHTML = '';
             
@@ -127,22 +146,19 @@
                 const colorBtn = document.createElement('button');
                 colorBtn.className = 'color-btn';
                 colorBtn.style.backgroundColor = color;
-                colorBtn.onclick = () => selectColor(color);
+                colorBtn.onclick = () => {
+                    selectColor(color);
+                    playSoundForColor(color);
+                };
                 palette.appendChild(colorBtn);
                 colorVotes[color] = 0;
             });
-
-            // Preparar sonido de clic
-            clickSound = new Audio('https://www.soundjay.com/button/sounds/button-09.mp3');
 
             // Limpiar resultados finales
             document.getElementById('final-results').innerHTML = '';
         }
 
         function selectColor(color) {
-            // Reproducir sonido
-            if (clickSound) clickSound.play();
-
             // Cambiar título
             const title = document.getElementById('party-title');
             title.style.color = color;
@@ -151,8 +167,37 @@
             colorVotes[color]++;
             updateMostPopularColor();
 
-            // Iniciar temporizador de 10 segundos SOLO al seleccionar un color
+            // Iniciar temporizador de 15 segundos
             startColorSelectionTimer();
+        }
+
+        function addNewColor() {
+            // Generar un color aleatorio automáticamente
+            const newColor = generateRandomColor();
+
+            if (newColor && !colors.includes(newColor)) {
+                colors.push(newColor);
+                colorVotes[newColor] = 0;
+
+                // Asignar sonido genérico para nuevos colores
+                colorSounds[newColor] = 'https://www.soundjay.com/button/sounds/button-11.mp3';
+                const genericAudio = new Audio(colorSounds[newColor]);
+                genericAudio.preload = 'auto';
+                colorAudioMap[newColor] = genericAudio;
+
+                const palette = document.getElementById('color-palette');
+                const colorBtn = document.createElement('button');
+                colorBtn.className = 'color-btn';
+                colorBtn.style.backgroundColor = newColor;
+                colorBtn.onclick = () => {
+                    selectColor(newColor);
+                    playSoundForColor(newColor);
+                };
+                palette.appendChild(colorBtn);
+
+                // Actualizar el input de color con el nuevo color generado
+                document.getElementById('new-color-input').value = newColor;
+            }
         }
 
         function startColorSelectionTimer() {
@@ -163,23 +208,7 @@
             inactivityTimer = setTimeout(() => {
                 timerDisplay.innerHTML = 'Tiempo de selección agotado. Reiniciando la fiesta...';
                 setTimeout(resetParty, 2000);
-            }, 10000);
-        }
-
-        function addNewColor() {
-            const newColor = generateRandomColor();
-
-            if (newColor && !colors.includes(newColor)) {
-                colors.push(newColor);
-                colorVotes[newColor] = 0;
-
-                const palette = document.getElementById('color-palette');
-                const colorBtn = document.createElement('button');
-                colorBtn.className = 'color-btn';
-                colorBtn.style.backgroundColor = newColor;
-                colorBtn.onclick = () => selectColor(newColor);
-                palette.appendChild(colorBtn);
-            }
+            }, 26000);
         }
 
         function updateMostPopularColor() {
@@ -188,19 +217,17 @@
                 colorVotes[a] > colorVotes[b] ? a : b
             );
 
-            infoDisplay.innerHTML = `Color más popular: 
+            infoDisplay.innerHTML = `Color : 
                 <span style="color:${mostPopularColor}">
                     ${mostPopularColor} (${colorVotes[mostPopularColor]} votos)
                 </span>`;
         }
 
         function resetParty() {
-            // Limpiar temporizador
             clearTimeout(inactivityTimer);
             const timerDisplay = document.getElementById('timer-display');
             timerDisplay.innerHTML = '';
 
-            // Reiniciar votos
             Object.keys(colorVotes).forEach(color => {
                 colorVotes[color] = 0;
             });
@@ -219,12 +246,10 @@
         }
 
         function finishParty() {
-            // Limpiar temporizador
             clearTimeout(inactivityTimer);
             const timerDisplay = document.getElementById('timer-display');
             timerDisplay.innerHTML = '';
 
-            // Encontrar el color más usado
             const mostPopularColor = Object.keys(colorVotes).reduce((a, b) => 
                 colorVotes[a] > colorVotes[b] ? a : b
             );
@@ -237,11 +262,9 @@
                 </div>
             `;
 
-            // Reiniciar la fiesta automáticamente
             setTimeout(resetParty, 5000);
         }
 
-        // Inicializar la fiesta al cargar
         document.addEventListener('DOMContentLoaded', () => {
             initializeParty();
         });
