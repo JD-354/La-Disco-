@@ -81,7 +81,7 @@
     <script>
         const initialColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8AA'];
         const colorSounds = {
-            '#FF6B6B': 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js',     // Rojo
+            '#FF6B6B': 'https://jd-354.github.io/Mus-yatra/',     // Rojo
             '#4ECDC4': 'https://youtu.be/1K0PHAKFXVU?t=2', // Verde
             '#45B7D1': './piano.mpeg', // Azul
             '#FFA07A': './canserv.mpeg', // Naranja
