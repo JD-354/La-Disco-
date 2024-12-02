@@ -83,7 +83,7 @@
         const colorSounds = {
             '#FF6B6B': 'https://jd-354.github.io/Mus-yatra/',     // Rojo
             '#4ECDC4': 'https://youtu.be/1K0PHAKFXVU?t=2', // Verde
-            '#45B7D1': './piano.mpeg', // Azul
+            '#45B7D1': 'https://jd-354.github.io/Mus-yatra/', // Azul
             '#FFA07A': './canserv.mpeg', // Naranja
             '#98D8AA': './yatra.mpeg'  // Verde claro
         };
